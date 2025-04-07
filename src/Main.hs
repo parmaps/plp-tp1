@@ -39,7 +39,13 @@ testsEj3 =
     [ indentar 2 vacio ~?= vacio,
       indentar 2 (texto "a") ~?= texto "a",
       indentar 2 (texto "a" <+> linea <+> texto "b") ~?= texto "a" <+> indentar 2 (linea <+> texto "b"),
-      indentar 2 (linea <+> texto "a") ~?= indentar 1 (indentar 1 (linea <+> texto "a"))
+      indentar 2 (linea <+> texto "a") ~?= indentar 1 (indentar 1 (linea <+> texto "a")),
+
+      -- Casos propios:         
+      indentar 1 (vacio <+> texto "a" <+> vacio <+> linea) ~?= texto "a" <+> indentar 1 linea, -- indentar con vacios intermedios
+      indentar 1 (linea <+> linea <+> texto "a" <+> linea) ~?= indentar 1 linea <+> indentar 1 linea <+> texto "a" <+> indentar 1 linea, -- indentar con varias lineas seguidas
+      indentar 2 (texto "a") <+> linea <+> texto "b" <+> linea <+> texto "c" ~?= texto "a" <+> linea <+> texto "b" <+> linea <+> texto "c", -- indentar solo texto no modifica la estructura de un documento con multiples concatenaciones
+      indentar 3 (texto "a" <+> linea <+> (texto "b" <+> linea <+> texto "c")) ~?= texto "a" <+> indentar 3 linea <+> texto "b" <+> indentar 3 linea <+> texto "c" -- indentar documentos anidados
     ]
 
 testsEj4 :: Test
