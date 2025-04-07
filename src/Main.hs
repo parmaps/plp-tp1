@@ -58,7 +58,15 @@ testsEj4 =
   test
     [ mostrar vacio ~?= "",
       mostrar linea ~?= "\n",
-      mostrar (indentar 2 (texto "a" <+> linea <+> texto "b")) ~?= "a\n  b"
+      mostrar (indentar 2 (texto "a" <+> linea <+> texto "b")) ~?= "a\n  b",
+
+      -- Casos propios:
+      mostrar (vacio <+> vacio <+> vacio) ~?= "",--mostrar multiples vacios concatenados
+      mostrar (linea <+> linea <+> linea) ~?= "\n\n\n",--mostrar multiples lineas concatenadas
+      mostrar (indentar 1 (texto "a" <+> vacio <+> texto "b" <+> vacio <+> texto "c")) ~?= "abc",--mostrar multiples textos concatenados e intercalados con vacios e indentacion
+      mostrar (indentar 2 (texto "a" <+> linea <+> texto "b" <+> linea <+> texto "c")) ~?= "a\n  b\n  c", --mostrar multiples elementos indentados y concatenados
+      mostrar (indentar 2 (texto "a" <+> linea <+> texto "b" <+> linea <+> texto "c")) ~?= "a\n  b\n  c", --mostrar multiples elementos indentados y concatenados
+      mostrar (indentar 3 (linea <+> texto "a") <+> indentar 2 (linea <+> texto "b" <+> linea <+> texto "c" <+> linea)) ~?= "\n   a\n  b\n  c\n  " --mostrar multiples elementos indentados y concatenados
     ]
 
 pericles, merlina, addams, familias :: PPON
