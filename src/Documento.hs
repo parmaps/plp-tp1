@@ -42,13 +42,8 @@ infixr 6 <+>
 
 -- ejercicio 2
 (<+>) :: Doc -> Doc -> Doc
-d1 <+> d2 = case d1 of
-              vacio -> procesDoc d2
-              Texto s d -> concatText s (procesDoc d2)
-              Linea i d -> concatLinea i (procesDoc d2)
+d1 <+> d2 = foldDoc d2 concatText concatLinea d1
 
-procesDoc :: Doc -> Doc
-procesDoc = foldDoc Vacio concatText concatLinea;
 
 concatText :: String -> Doc -> Doc
 concatText s d = case d of 
