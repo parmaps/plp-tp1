@@ -52,13 +52,13 @@ procesDoc = foldDoc Vacio concatText concatLinea;
 
 concatText :: String -> Doc -> Doc
 concatText s d = case d of 
-                  vacio -> Texto s Vacio 
+                  Vacio -> Texto s Vacio                   
                   Texto s' doc -> Texto (s ++ s') doc
                   Linea i doc -> Texto s (Linea i doc)
 
 concatLinea :: Int -> Doc -> Doc
 concatLinea i d = case d of
-                  vacio -> Linea i Vacio
+                  Vacio -> Linea i Vacio
                   Texto s doc -> Linea i (Texto s doc)
                   Linea i' doc -> Linea i (Linea i' doc)
                 
