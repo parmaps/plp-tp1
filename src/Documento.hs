@@ -60,11 +60,11 @@ concatLinea i d = case d of
 
 -- ejercicio 3
 indentar :: Int -> Doc -> Doc
-indentar i = foldDoc Vacio Texto (\i' d -> Linea (i+i') d) -- no se si esta bien pero pasa los test, consultar
+indentar i = foldDoc Vacio Texto (\i' d -> Linea (i+i') d)
 
 -- ejercicio 4
 mostrar :: Doc -> String
-mostrar = foldDoc "" (++) (\i d -> "\n" ++ replicate i ' ' ++ d)  -- a chequear 
+mostrar = foldDoc "" (++) (\i d -> "\n" ++ replicate i ' ' ++ d)
 
 -- | Función dada que imprime un documento en pantalla
 
