@@ -24,7 +24,13 @@ testsEj2 =
   test
     [ vacio <+> vacio ~?= vacio,
       texto "a" <+> texto "b" ~?= texto "ab",
-      (texto "a" <+> linea) <+> texto "b" ~?= texto "a" <+> (linea <+> texto "b")
+      (texto "a" <+> linea) <+> texto "b" ~?= texto "a" <+> (linea <+> texto "b"),
+
+      -- Casos propios:      
+      vacio <+> texto "a" <+> vacio ~?= texto "a", -- texto entre documentos vacios
+      (texto "a" <+> texto "b") <+> texto "c"  ~?=  texto "a" <+> (texto "b" <+> texto "c"),  -- asociatividad con textos
+      (linea <+> texto "a") <+> texto "b" ~?= linea <+> (texto "a" <+> texto "b"), -- asociatividad con linea
+      linea <+> texto "a" <+> texto "b" ~?= linea <+> (texto "a" <+> texto "b") -- asociatividad con linea
     ]
 
 testsEj3 :: Test
