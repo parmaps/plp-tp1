@@ -42,7 +42,7 @@ infixr 6 <+>
 
 -- ejercicio 2
 (<+>) :: Doc -> Doc -> Doc
-d1 <+> d2 = foldDoc d2 concatText concatLinea d1
+d1 <+> d2 = foldDoc (foldDoc Vacio concatText concatLinea d2) concatText concatLinea d1 --consultar
 
 
 concatText :: String -> Doc -> Doc
@@ -60,13 +60,11 @@ concatLinea i d = case d of
 
 -- ejercicio 3
 indentar :: Int -> Doc -> Doc
-indentar = indentar
--- indentar i = foldDoc <+> (Linea i <+>) tiene errores
+indentar i = foldDoc Vacio Texto (\i' d -> Linea (i+i') d) -- no se si esta bien pero pasa los test, consultar
 
 -- ejercicio 4
 mostrar :: Doc -> String
-mostrar = mostrar
--- mostrar = foldDoc "" (++) (no se)
+mostrar = foldDoc "" (++) (\i d -> "\n" ++ replicate i ' ' ++ d)  -- a chequear 
 
 -- | Función dada que imprime un documento en pantalla
 
