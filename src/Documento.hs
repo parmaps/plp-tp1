@@ -42,7 +42,7 @@ infixr 6 <+>
 
 -- ejercicio 2
 (<+>) :: Doc -> Doc -> Doc
-d1 <+> d2 = foldDoc (foldDoc Vacio concatText concatLinea d2) concatText concatLinea d1 --consultar
+d1 <+> d2 = foldDoc d2 concatText concatLinea d1
 
 
 concatText :: String -> Doc -> Doc
