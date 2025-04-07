@@ -1,6 +1,11 @@
 module PPON where
 
 import Documento
+import Documento (foldDoc, vacio)
+
+recr :: b -> (a -> [a] -> b -> b) -> [a] -> b
+recr z _ [] = z
+recr z f (x:xs) = f x xs (recr z f xs)
 
 data PPON
   = TextoPP String
@@ -9,13 +14,19 @@ data PPON
   deriving (Eq, Show)
 
 pponAtomico :: PPON -> Bool
-pponAtomico = error "PENDIENTE: Ejercicio 5"
+pponAtomico pepon = case pepon of 
+                        TextoPP _ -> True
+                        IntPP _ -> True
+                        ObjetoPP _ -> False --puede mejorar
 
 pponObjetoSimple :: PPON -> Bool
-pponObjetoSimple = error "PENDIENTE: Ejercicio 6"
+pponObjetoSimple pepon = case pepon of 
+                            TextoPP _ -> False
+                            IntPP _ -> False
+                            ObjetoPP xs -> foldr(\ x r -> pponAtomico (snd x) && r ) True xs
 
 intercalar :: Doc -> [Doc] -> Doc
-intercalar = error "PENDIENTE: Ejercicio 7"
+intercalar d = recr vacio (\x xs r -> if xs /= [] then x <+> d <+> r else x <+> vacio) -- consultar con profe
 
 entreLlaves :: [Doc] -> Doc
 entreLlaves [] = texto "{ }"
@@ -30,7 +41,7 @@ entreLlaves ds =
     <+> texto "}"
 
 aplanar :: Doc -> Doc
-aplanar = error "PENDIENTE: Ejercicio 8"
+aplanar = foldDoc vacio <+> (\_ d -> texto " " d)
 
 pponADoc :: PPON -> Doc
 pponADoc = error "PENDIENTE: Ejercicio 9"
