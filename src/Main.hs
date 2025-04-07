@@ -29,8 +29,13 @@ testsEj2 =
       -- Casos propios:      
       vacio <+> texto "a" <+> vacio ~?= texto "a", -- texto entre documentos vacios
       (texto "a" <+> texto "b") <+> texto "c"  ~?=  texto "a" <+> (texto "b" <+> texto "c"),  -- asociatividad con textos
+      linea <+> texto "a" <+> texto "b" ~?= linea <+> (texto "a" <+> texto "b"), -- asociatividad trivial (por infixr) con linea
       (linea <+> texto "a") <+> texto "b" ~?= linea <+> (texto "a" <+> texto "b"), -- asociatividad con linea
-      linea <+> texto "a" <+> texto "b" ~?= linea <+> (texto "a" <+> texto "b") -- asociatividad con linea
+
+      linea <+> texto "a" <+> texto "b" <+> linea <+> texto "c" <+> texto "d" ~?= linea <+> (texto "a" <+> (texto "b" <+> linea <+> texto "c" <+> texto "d")), -- concatenacion de multiples documentos
+      linea <+> texto "a" <+> vacio <+> texto "b" <+> vacio <+> texto "c" <+> linea ~?= linea <+> (texto "a" <+> (texto "b" <+> texto "c")) <+> linea, -- concatenacion de multiples documentos con vacio entre medio
+      (linea <+> texto "a" <+> linea <+> (texto "b" <+> linea <+>  texto "c" <+> texto "d")) ~?= linea <+> texto "a" <+> linea <+> texto "b" <+> linea <+> texto "c" <+> texto "d"-- concatenacion de multiples documentos es equivalente a aplanar los docs
+      
     ]
 
 testsEj3 :: Test
