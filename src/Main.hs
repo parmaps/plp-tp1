@@ -79,7 +79,11 @@ testsEj6 :: Test
 testsEj6 =
   test
     [ pponObjetoSimple pericles ~?= True,
-      pponObjetoSimple addams ~?= False
+      pponObjetoSimple addams ~?= False,
+
+      -- Casos propios:
+      pponObjetoSimple merlina ~?= True,
+      pponObjetoSimple familias ~?= False
     ]
 
 a, b, c :: Doc
