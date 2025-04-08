@@ -41,8 +41,7 @@ entreLlaves ds =
     <+> texto "}"
 
 aplanar :: Doc -> Doc
-aplanar = error "PENDIENTE: Ejercicio 8"
--- aplanar = foldDoc vacio <+> (\_ d -> texto " " d)
+aplanar = foldDoc vacio (\s d -> texto s <+> d) (\_ d -> texto " " <+> d)
 
 pponADoc :: PPON -> Doc
 pponADoc = error "PENDIENTE: Ejercicio 9"
