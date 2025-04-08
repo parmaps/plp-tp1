@@ -97,7 +97,13 @@ testsEj7 =
     [ mostrar (intercalar (texto ", ") []) ~?= "",
       mostrar (intercalar (texto ", ") [a, b, c]) ~?= "a, b, c",
       mostrar (entreLlaves []) ~?= "{ }",
-      mostrar (entreLlaves [a, b, c]) ~?= "{\n  a,\n  b,\n  c\n}"
+      mostrar (entreLlaves [a, b, c]) ~?= "{\n  a,\n  b,\n  c\n}",
+
+      -- Casos propios:
+      mostrar (intercalar (texto ": ") [a, linea, b, linea, c]) ~?= "a: \n: b: \n: c", -- intercalar con lineas
+      mostrar (intercalar (texto "! ") [a, linea, vacio, b, linea, vacio, c]) ~?= "a! \n! ! b! \n! ! c", -- intercalar con lineas y vacios
+      mostrar (entreLlaves [a, linea, b, linea, c]) ~?= "{\n  a,\n  \n  ,\n  b,\n  \n  ,\n  c\n}",-- mostrar entre llaves con lineas
+      mostrar (entreLlaves [a, linea, vacio, b, linea, vacio, c]) ~?= "{\n  a,\n  \n  ,\n  ,\n  b,\n  \n  ,\n  ,\n  c\n}"-- mostrar entre llaves con lineas y vacios
     ]
 
 testsEj8 :: Test
