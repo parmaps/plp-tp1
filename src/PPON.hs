@@ -1,7 +1,6 @@
 module PPON where
 
 import Documento
-import Documento (foldDoc, vacio)
 
 recr :: b -> (a -> [a] -> b -> b) -> [a] -> b
 recr z _ [] = z
@@ -17,7 +16,7 @@ pponAtomico :: PPON -> Bool
 pponAtomico pepon = case pepon of 
                         TextoPP _ -> True
                         IntPP _ -> True
-                        ObjetoPP _ -> False --puede mejorar
+                        ObjetoPP _ -> False
 
 pponObjetoSimple :: PPON -> Bool
 pponObjetoSimple pepon = case pepon of 
@@ -26,7 +25,11 @@ pponObjetoSimple pepon = case pepon of
                             ObjetoPP xs -> foldr(\ x r -> pponAtomico (snd x) && r ) True xs
 
 intercalar :: Doc -> [Doc] -> Doc
-intercalar d = recr vacio (\x xs r -> if xs /= [] then x <+> d <+> r else x <+> vacio) -- consultar con profe
+intercalar separador = recr vacio (\x xs r -> 
+    if xs /= [] 
+        then x <+> separador <+> r 
+        else x)
+-- consultar con profe         
 
 entreLlaves :: [Doc] -> Doc
 entreLlaves [] = texto "{ }"
