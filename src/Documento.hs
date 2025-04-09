@@ -42,22 +42,14 @@ infixr 6 <+>
 
 -- ejercicio 2
 (<+>) :: Doc -> Doc -> Doc
-d1 <+> d2 = foldDoc d2 concatText concatLinea d1
+d1 <+> d2 = foldDoc d2 concatText Linea d1 --
 
 
 concatText :: String -> Doc -> Doc
-concatText s d = case d of 
-                  Vacio -> Texto s Vacio                   
+concatText s d = case d of                   
                   Texto s' doc -> Texto (s ++ s') doc
-                  Linea i doc -> Texto s (Linea i doc)
-
-concatLinea :: Int -> Doc -> Doc
-concatLinea i d = case d of
-                  Vacio -> Linea i Vacio
-                  Texto s doc -> Linea i (Texto s doc)
-                  Linea i' doc -> Linea i (Linea i' doc)
+                  x -> Texto s x --
                 
-
 -- ejercicio 3
 indentar :: Int -> Doc -> Doc
 indentar i = foldDoc Vacio Texto (\i' d -> Linea (i+i') d)
