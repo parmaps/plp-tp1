@@ -1,7 +1,6 @@
 module PPON where
 
 import Documento
-import Documento (foldDoc, vacio)
 
 recr :: b -> (a -> [a] -> b -> b) -> [a] -> b
 recr z _ [] = z
@@ -17,7 +16,7 @@ pponAtomico :: PPON -> Bool
 pponAtomico pepon = case pepon of 
                         TextoPP _ -> True
                         IntPP _ -> True
-                        ObjetoPP _ -> False --puede mejorar
+                        ObjetoPP _ -> False
 
 pponObjetoSimple :: PPON -> Bool
 pponObjetoSimple pepon = case pepon of 
