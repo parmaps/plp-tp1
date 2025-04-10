@@ -109,7 +109,12 @@ testsEj7 =
 testsEj8 :: Test
 testsEj8 =
   test
-    [ mostrar (aplanar (a <+> linea <+> b <+> linea <+> c)) ~?= "a b c"
+    [ mostrar (aplanar (a <+> linea <+> b <+> linea <+> c)) ~?= "a b c",
+
+    -- Casos propios:
+      mostrar (aplanar (a <+> b <+> c)) ~?= "abc", -- aplanar solo texto
+      mostrar (aplanar (a <+> indentar 2 (linea <+> b))) ~?= "a b", -- aplanar lineas e indentados 
+      mostrar (aplanar ((linea <+> a <+> linea) <+> indentar 2 ( linea <+> b <+> linea <+> c) <+> linea)) ~?= " a  b c " -- aplanar múltiples lineas e indentados 
     ]
 
 testsEj9 :: Test
