@@ -45,7 +45,7 @@ aplanar = foldDoc vacio (\s d -> texto s <+> d) (\_ d -> texto " " <+> d)
 pponADoc :: PPON -> Doc
 pponADoc pepon = case pepon of 
                     -- ObjetoPP ((s,p):xs) -> (texto s (pponADoc p)) 
-                    ObjetoPP xs -> (texto "{") <+> (foldr(\(s,p) r -> (texto s <+> <+> (pponADoc p)) <+> r) vacio xs) 
+                    ObjetoPP xs -> texto "{" <+> foldr(\(s,p) r -> (texto s <+> pponADoc p) <+> r) vacio xs 
                     IntPP s -> texto (show s) -- usar entre llaves
                     TextoPP s -> texto (show s) -- condicion objeto simple
 
