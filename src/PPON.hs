@@ -44,19 +44,9 @@ aplanar = foldDoc vacio (\s d -> texto s <+> d) (\_ d -> texto " " <+> d)
 
 pponADoc :: PPON -> Doc
 pponADoc pepon = case pepon of 
-                    -- ObjetoPP ((s,p):xs) -> (texto s (pponADoc p)) 
-                    ObjetoPP xs -> texto "{" <+> foldr(\(s,p) r -> (texto s <+> pponADoc p) <+> r) vacio xs 
-                    IntPP s -> texto (show s) -- usar entre llaves
-                    TextoPP s -> texto (show s) -- condicion objeto simple
-
--- aDoc :: [Doc] -> Doc
--- aDoc [] = vacio
--- aDoc (x:xs) = x <+> aDoc xs
-
---ObjetoPP cosas -> aDoc(map(\(x,o) -> (texto ((show x)++ ":" ++ (show o) ++ ",")))cosas)
-
--- data PPON
---   = TextoPP String
---   | IntPP Int
---   | ObjetoPP [(String, PPON)]
---   deriving (Eq, Show)
+                    ObjetoPP xs -> if pponObjetoSimple pepon
+                                    then aplanar (entreLlaves (recPpon xs))
+                                    else entreLlaves (recPpon xs)
+                    IntPP s -> texto (show s) 
+                    TextoPP s -> texto (show s)
+                  where recPpon = map (\(s,p) -> (texto (show s) <+> texto ": " <+> pponADoc p))
