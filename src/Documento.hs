@@ -41,6 +41,13 @@ foldDoc fVacio fTexto fLinea documento = case documento of
 infixr 6 <+>
 
 -- ejercicio 2
+-- Se satisface el Invariante de Doc porque:
+-- En primer lugar, al usar foldDoc nos aseguramos de estar procesando la estructura recursiva de manera ordenada,
+-- sin mezclar los constructores de Vacio, Texto y Linea.
+-- Los documentos Vacio no modifican los documentos con los que se concatenan.
+-- Los documentos Texto solo se concatenarán directamente con documentos Texto válidos procesados mediante {concatText}, 
+-- ya que de esto se encarga la función {texto} (que evitar construir textos con saltos de linea y strings vacios).
+-- Los documentos Linea mantendrán i >= 0 por la propia definicion del constructor Linea.
 (<+>) :: Doc -> Doc -> Doc
 d1 <+> d2 = foldDoc d2 concatText Linea d1 --
 
@@ -51,6 +58,12 @@ concatText s d = case d of
                   x -> Texto s x --
                 
 -- ejercicio 3
+-- Se mantiene el Invariante de Doc porque:
+-- Se mantienen las razones del ejercio 2 (<+>) respecto a foldDoc, los constructores Vacio, Texto y la funcion {texto},
+-- ya que estos casos se preseveran inalterados.
+-- Se modifica la indenteacion usando (Linea (i+i'), 
+-- y la precondicion explicita que siempre se agrega un numero mayor que 0 de espacios (i > 0),
+-- y como el el invariante del Doc original era i' >= 0 siempre se cumplirá que Linea (i+i') >= 0.
 indentar :: Int -> Doc -> Doc
 indentar i = foldDoc Vacio Texto (\i' d -> Linea (i+i') d)
 
