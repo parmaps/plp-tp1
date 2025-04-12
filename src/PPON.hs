@@ -25,9 +25,8 @@ pponObjetoSimple pepon = case pepon of
                             ObjetoPP xs -> foldr(\ x r -> pponAtomico (snd x) && r ) True xs
 
 intercalar :: Doc -> [Doc] -> Doc
--- intercalar d = recr vacio (\x xs r -> if xs /= [] then x <+> d <+> r else x <+> vacio) -- hacer con foldr1, hacer un caso de lista vacia
--- intercalar vacio = vacio
-intercalar d = foldr1 (\x r-> if r == vacio then x <+> d <+> vacio else x <+> d <+> r)
+intercalar d = recr vacio (\x xs r -> if xs /= [] then x <+> d <+> r else x <+> vacio) -- hacer con foldr1, hacer un caso de lista vacia
+-- no llegamos a cambiarlo a foldr1 :c
 
 entreLlaves :: [Doc] -> Doc
 entreLlaves [] = texto "{ }"
@@ -44,6 +43,10 @@ entreLlaves ds =
 aplanar :: Doc -> Doc
 aplanar = foldDoc vacio (\s d -> texto s <+> d) (\_ d -> texto " " <+> d)
 
+-- Justificacion de Recursion
+-- Asumiendo que las funciones(aplanar, entreLlaves) utilizadas en la funcion pponADoc no modifican el tipo de recursion
+-- podemos decir que la funcion pponADoc utiliza recursion estructural, ya que cumple con tener una funcion
+-- para cada constructor, pepon solo se usa en el llamado recursivo y el caso base tiene un valor fijo.
 pponADoc :: PPON -> Doc
 pponADoc pepon = case pepon of 
                     ObjetoPP xs -> if pponObjetoSimple pepon
@@ -52,3 +55,4 @@ pponADoc pepon = case pepon of
                     IntPP s -> texto (show s) 
                     TextoPP s -> texto (show s)
                   where recPpon = map (\(s,p) -> (texto (show s) <+> texto ": " <+> pponADoc p))
+

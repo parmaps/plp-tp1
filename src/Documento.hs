@@ -40,7 +40,7 @@ foldDoc fVacio fTexto fLinea documento = case documento of
 -- También permite que expresiones como `texto "a" <+> linea <+> texto "c"` sean válidas sin la necesidad de usar paréntesis.
 infixr 6 <+>
 
--- ejercicio 2
+-- Justificacion Invariante
 -- Se satisface el Invariante de Doc porque:
 -- En primer lugar, al usar foldDoc nos aseguramos de estar procesando la estructura recursiva de manera ordenada,
 -- sin mezclar los constructores de Vacio, Texto y Linea.
@@ -57,7 +57,7 @@ concatText s d = case d of
                   Texto s' doc -> Texto (s ++ s') doc
                   x -> Texto s x --
                 
--- ejercicio 3
+-- Justificacion Invariante
 -- Se mantiene el Invariante de Doc porque:
 -- Se mantienen las razones del ejercio 2 (<+>) respecto a foldDoc, los constructores Vacio, Texto y la funcion {texto},
 -- ya que estos casos se preseveran inalterados.
