@@ -1,56 +1,47 @@
-indentar :: Int -> Doc -> Doc  
-indentar = l foldDoc Vector Texto (\l d -> lineas (l + d) d)
-
-foldDoc :: b -> (String -> b -> b) -> (Int -> b -> b) -> Doc -> b  
-foldDoc vacío fTexto fLinea documento = rec documento  
-  where rec = 
-    vacío         si documento = vacío  
-    Texto s d     fTexto s (rec d)  
-    Linea l d     fLinea l (rec d)  
-
-
-data Doc = Vacío  
-         | Texto String Doc  
-         | Linea Int Doc
+P(x) : indentar n (indentar m x) = indentar (n+m) x
 
 
 CASO BASE: 
-x = Vacío
-
-indentar m (indentar l vacío) = indentar (m + l) vacío  
-indentar m vacío = vacío                                                    {lema 1}  
-vacío = vacío                                                               {lema 1}
+P(Vacio):
+indentar n (indentar m Vacío) = indentar (n + m) Vacío  
+indentar m Vacío = Vacío                                                    {lema 1}  
+Vacío = Vacío                                                               {lema 1}
 
 
 PASO INDUCTIVO:
-Tenemos 2 casos recurisvos Texto y Linea
+Proponemos hacer induccion estructural.
 
 Caso Texto:
 
-indentar m (indentar l (Texto s d))  
-= indentar m (Texto s (indentar l d))                                       {lema 2}
-= Texto s (indentar m (indentar l d))                                       {lema 2}
-= Texto s (indentar (m + l) d)                                              {HI} 
-= indentar (m + l) (Texto s d)
-| Como queria probar
+Tenemos que x = Texto s d
+QVQ indentar n (indentar m (Texto s d)) => indentar (n + m) Texto s d
+{HI} indentar n (indentar m d) = indentar (n + m) d
 
-indentar m (linea k d) = Linea (m+k) (indentar m d) ∀ m, k :: Int positivos, d :: Doc
+
+indentar n (indentar m (Texto s d))  
+= indentar n (Texto s (indentar m d))                                       {lema 2}
+= Texto s (indentar n (indentar m d))                                       {lema 2}
+= Texto s (indentar (n + m) d)                                              {HI} 
+= indentar (m + m) (Texto s d)                                              {lema 2}
+| Como queria probar
 
 Caso Linea:
 Tenemos que x = Linea i d
 QVQ indentar n (indentar m Linea i d) => indentar (n + m) Linea i d
-{HI} indentar n (indentar m d) 
+{HI} indentar n (indentar m d) = indentar (n+m) d
 
-indentar n (indentar m Linea i d) {lema 3}
-= identar n (Linea(m+i) (indentar m d)) {lema 3}
-= Linea (n+(m+i)) indentar n (indentar m d) {HI}
-= Linea (n+(m+i)) indentar (n + m) d
-= Linea ((n+m)+i) indentar ((n+m)) d  {lema 3}
-= indentar n+m (linea i d) {lema 3}
+indentar n (indentar m Linea i d)                                           
+= indentar n (Linea(m+i) (indentar m d))                                     {lema 3}
+= Linea (n+(m+i)) indentar n (indentar m d)                                 {lema 3}
+= Linea (n+(m+i)) indentar (n + m) d                                        {HI}
+= Linea ((n+m)+i) indentar (n + m) d                                        {int}
+= indentar n+m (Linea i d)                                                  {lema 3}
+| Como queria probar
 
-Lemas:
 
-Definiciones necesarias:
+Luego por el caso base Verdadero y el Paso Inductivo tambien Verdadero vale P(x)
+
+Lemas y Definiciones necesarias:
 
 {def indentar} = foldDoc Vacio Texto (\i' d -> Linea (i+i') d)
 
@@ -63,48 +54,60 @@ Definiciones necesarias:
 LEMA 1:
 
 indentar k vacío = vacío  ∀ k :: Int positivos
-= foldDoc Vacio Texto (\i' d -> Linea (k+i') d) vacio                       {def indentar}
+= foldDoc Vacio Texto (\i' d -> Linea (k+i') d) Vacio                       {def indentar}
 = (case documento of                                                 
                     Vacio -> fVacio
                     Texto s d -> fTexto s (rec d)
                     Linea k d -> fLinea k (rec d)
-                    where rec = foldDoc fVacio fTexto fLinea) vacio         {def foldDoc} 
-= case Vacio of Vacio -> fVacio                                             {β}        
-= vacío                                                                     {case}     
+                    where rec = foldDoc fVacio fTexto fLinea) Vacio         {def foldDoc} 
+= (case Vacio of                                                 
+                    Vacio -> Vacio
+                    Texto s d -> Texto s (rec d)
+                    Linea k d -> (\i' d' → Linea (k + i') d') d) k (rec d) 
+                    where rec = foldDoc Vacio Texto ((\i' d' → Linea (k + i') d') d)                
+                                                                            {def β} 
+= Vacio                                                                     {case}     
 | Como queria probar
                                                         
 LEMA 2:
 
-indentar k (texto s d) = texto s (indentar k d)  ∀ k :: Int positivos, s :: String, d :: Doc
-indentar k (texto s d)
-= foldDoc Vacio Texto (\i' d' -> Linea (k+i') d') texto s d                   {def indentar}
+indentar k (Texto s d) = Texto s (indentar k d)  ∀ k :: Int positivos, s :: String, d :: Doc
+indentar k (Texto s d)
+= foldDoc Vacio Texto (\i' d' -> Linea (k+i') d') Texto s d                 {def indentar}
 = (case documento of                                                 
                     Vacio -> Vacio
                     Texto s d -> Texto s (rec d)
-                    Linea k d -> (\i' d' → linea (k + i') d') d) k (rec d) 
-                    where rec = foldDoc Vacio Texto ((\i' d' → linea (k + i') d') d) Texto s d     {def foldDoc} 
+                    Linea k d -> (\i' d' → Linea (k + i') d') d) k (rec d) 
+                    where rec = foldDoc Vacio Texto ((\i' d' → Linea (k + i') d') d) Texto s d     
+                                                                            {def foldDoc} 
 = (case Texto s d of                                                 
                     Vacio -> Vacio
                     Texto s d -> Texto s (rec d)
-                    Linea k d -> (\i' d' → linea (k + i') d') d) k (rec d) 
-                    where rec = foldDoc Vacio Texto ((\i' d' → linea (k + i') d') d)     {def B} 
+                    Linea k d -> (\i' d' → Linea (k + i') d') d) k (rec d) 
+                    where rec = foldDoc Vacio Texto ((\i' d' → Linea (k + i') d') d)                
+                                                                            {def β} 
 
-= texto s (foldDoc vacío texto (\i' d' → linea (k + i') d') d)              {case}
-= texto s (indentar k d)                                                    {def indentar}
+= Texto s (foldDoc vacío Texto (\i' d' → Linea (k + i') d') d)              {case}
+= Texto s (indentar k d)                                                    {def indentar}
 | Como queria probar
 
 LEMA 3:
 
-indentar m (linea k d) = Linea (k + m) (indentar m d) ∀ m, k :: Int positivos, d :: Doc
-= indentar m (linea k d)
-= foldDoc Vacio Texto (\i' d' -> Linea (k+i') d') linea k d                   {def indentar}
+indentar m (Linea k d) = Linea (k + m) (indentar m d) ∀ m, k :: Int positivos, d :: Doc
+= indentar m (Linea k d)
+= foldDoc Vacio Texto (\i' d' -> Linea (k+i') d') Linea k d                 {def indentar}
 = (case documento of                                                 
                     Vacio -> fVacio
                     Texto s d -> fTexto s (rec d)
                     Linea k d -> fLinea k (rec d)
-                    where rec = foldDoc fVacio fTexto fLinea)  linea i d    {def foldDoc} 
+                    where rec = foldDoc fVacio fTexto fLinea)  Linea k d    {def foldDoc} 
+= (case Linea k d of                                                 
+                    Vacio -> Vacio
+                    Texto s d -> Texto s (rec d)
+                    Linea k d -> (\i' d' → Linea (k + i') d') d) k (rec d) 
+                    where rec = foldDoc Vacio Texto ((\i' d' → Linea (k + i') d') d)                
+                                                                            {def β} 
 
-= case linea k d of Linea k d -> linea (k + m)                              {β}           
-= linea (k + m) (foldDoc fVacio fTexto fLinea  d')                          {case}        
-= linea (k + m) (indentar m d)                                              {def indentar}   
+= Linea (k + m) (foldDoc Vacio Texto ((\i' d' → Linea (k + i') d') d) )    {case}           
+= Linea (k + m) (indentar m d)                                              {def indentar}   
 | Como queria probar
