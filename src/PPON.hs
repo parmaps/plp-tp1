@@ -25,7 +25,9 @@ pponObjetoSimple pepon = case pepon of
                             ObjetoPP xs -> foldr(\ x r -> pponAtomico (snd x) && r ) True xs
 
 intercalar :: Doc -> [Doc] -> Doc
-intercalar d = recr vacio (\x xs r -> if xs /= [] then x <+> d <+> r else x <+> vacio) -- hacer con foldr1, hacer un caso de lista vacia
+-- intercalar d = recr vacio (\x xs r -> if xs /= [] then x <+> d <+> r else x <+> vacio) -- hacer con foldr1, hacer un caso de lista vacia
+-- intercalar vacio = vacio
+intercalar d = foldr1 (\x r-> if r == vacio then x <+> d <+> vacio else x <+> d <+> r)
 
 entreLlaves :: [Doc] -> Doc
 entreLlaves [] = texto "{ }"
