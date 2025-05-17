@@ -42,12 +42,12 @@ infixr 6 <+>
 
 -- Justificacion Invariante
 -- Se satisface el Invariante de Doc porque:
--- En primer lugar, al usar foldDoc nos aseguramos de estar procesando la estructura recursiva de manera ordenada,
--- sin mezclar los constructores de Vacio, Texto y Linea.
--- Los documentos Vacio no modifican los documentos con los que se concatenan.
--- Los documentos Texto solo se concatenarán directamente con documentos Texto válidos procesados mediante {concatText}, 
--- ya que de esto se encarga la función {texto} (que evitar construir textos con saltos de linea y strings vacios).
--- Los documentos Linea mantendrán i >= 0 por la propia definicion del constructor Linea.
+-- En el caso de ser texto, el texto aplica la función texto (ya que en la parte que el foldDoc discrimina ese caso se aplica en la función texto en <+>)
+-- Si no viene con saltos de línea, no se agregan, dado que texto replica el mismo texto que viene sin agregar nada
+-- d ingresa nuevamente al foldDoc con las funciones especificadas en el <+>
+-- Siendo línea, entra en el caso de la funcion Linea, que se da de la misma manera en la que ingresa, y de esta manera no cambia el hecho de que i >= 0. Simplemente no se modifica la entrada
+-- A su vez, como aclara el PDF de la consigna, nos aseguramos de mantener los invariantes internos usando las funciones que nos evitan exportar los constructores
+
 (<+>) :: Doc -> Doc -> Doc
 d1 <+> d2 = foldDoc d2 concatText Linea d1 --
 
@@ -59,11 +59,11 @@ concatText s d = case d of
                 
 -- Justificacion Invariante
 -- Se mantiene el Invariante de Doc porque:
--- Se mantienen las razones del ejercio 2 (<+>) respecto a foldDoc, los constructores Vacio, Texto y la funcion {texto},
--- ya que estos casos se preseveran inalterados.
--- Se modifica la indenteacion usando (Linea (i+i'), 
--- y la precondicion explicita que siempre se agrega un numero mayor que 0 de espacios (i > 0),
--- y como el el invariante del Doc original era i' >= 0 siempre se cumplirá que Linea (i+i') >= 0.
+-- En el caso de ser texto, el string de entrada no se modifica, usando texto para mantener el invariante.
+-- con respecto a los saltos de línea, pasa lo mismo. No se modifica el string, y esto significa que no se le agrega ningún salto de línea.
+-- D ingresa y por foldDoc entra a indentar de nuevo, no se modifica el invariante con respecto a el, ya que solo se amplían los saltos de línea, el texto y el d no se modifican en esa instancia.
+-- En el caso de que sea Línea, se mantiene el invariante de que i>=0, ya que solo se suma un i positivo al número de línea que por invariante de entrada debe ser positivo.
+
 indentar :: Int -> Doc -> Doc
 indentar i = foldDoc Vacio Texto (\i' d -> Linea (i+i') d)
 
