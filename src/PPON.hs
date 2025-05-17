@@ -2,9 +2,9 @@ module PPON where
 
 import Documento
 
-recr :: b -> (a -> [a] -> b -> b) -> [a] -> b
-recr z _ [] = z
-recr z f (x:xs) = f x xs (recr z f xs)
+-- recr :: b -> (a -> [a] -> b -> b) -> [a] -> b
+-- recr z _ [] = z
+-- recr z f (x:xs) = f x xs (recr z f xs)
 
 data PPON
   = TextoPP String
@@ -25,8 +25,9 @@ pponObjetoSimple pepon = case pepon of
                             ObjetoPP xs -> foldr(\ x r -> pponAtomico (snd x) && r ) True xs
 
 intercalar :: Doc -> [Doc] -> Doc
-intercalar d = recr vacio (\x xs r -> if xs /= [] then x <+> d <+> r else x <+> vacio) -- hacer con foldr1, hacer un caso de lista vacia
--- no llegamos a cambiarlo a foldr1 :c
+intercalar _ [] = vacio
+intercalar sep docs = foldr1 (\doc resto -> doc <+> sep <+> resto) docs
+  
 
 entreLlaves :: [Doc] -> Doc
 entreLlaves [] = texto "{ }"
