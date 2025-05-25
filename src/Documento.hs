@@ -50,7 +50,7 @@ infixr 6 <+>
 -- Texto s d: utiliza la funcion concatText que nunca va a generar un Texto s d con s vacío ni con saltos de línea.
 --Esto se garantiza porque en los dos casos posibles:
 --si el segundo argumento (d2) es tambien Texto s' doc, entonces contruye uno nuevo concatenando el s de un documento d1 
---y el s' d2 (y sabemos que por el constructor s y s' ya cumplen el invariante)
+--y el s' d2 (y sabemos que s, s' y doc ya cumplen el invariante)
 --sino, se contruye un nuevo Texto con s y un doc que puede ser Vacio o Linea i d y también siguen cumpliendo con el invariante.
 
 --Linea s d: en este caso, trabaja directamente con el contructor Linea y sin modificar del valor de i por lo que podemos 
