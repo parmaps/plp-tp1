@@ -43,11 +43,11 @@ infixr 6 <+>
 -- Ejercicio 2
 
 -- Justificacion Invariante
--- Se satisface el Invariante de Doc:
--- En esta funcion trabajamos con foldDoc que esta bien contruido porque trabaja con constructores bien formados 
--- y no genera nuevos de forma arbitraria.
+--Se satisface el Invariante de Doc:
+--En esta funcion trabajamos con foldDoc para recorrer los documentos y cumple con el invariante porque 
+--trabaja con constructores bien formados y no genera nuevos de forma arbitraria.
 
--- Texto s d: utiliza la funcion concatText que nunca va a generar un Texto s d con s vacío ni con saltos de línea.
+--Texto s d: utiliza la funcion concatText que nunca va a generar un Texto s d con s vacío ni con saltos de línea.
 --Esto se garantiza porque en los dos casos posibles:
 --si el segundo argumento (d2) es tambien Texto s' doc, entonces contruye uno nuevo concatenando el s de un documento d1 
 --y el s' d2 (y sabemos que s, s' y doc ya cumplen el invariante)
@@ -71,17 +71,14 @@ concatText s d = case d of
 -- Ejercicio 3
 -- Justificacion Invariante
 -- Se mantiene el Invariante de Doc porque:
+--En este ejercicio también trabajamos con foldDoc para recorrer el documento y cumple con el invariante porque 
+--trabaja con constructores bien formados y no genera nuevos de forma arbitraria.
 
--- En el caso de ser texto, el string de entrada no se modifica, usando texto para mantener el invariante.
+--En caso de ser Vacío o Texto s d, no se modifica la estructura de entrada por lo que sabemos que se va a seguir 
+--cumpliendo el invariante. No va a tener s como string vacío, no va a contener saltos de línea y d va a ser Vacio o Linea i d.
 
--- con respecto a los saltos de línea, pasa lo mismo. No se modifica el string, y esto significa que no se
--- le agrega ningún salto de línea.
-
--- D ingresa y por foldDoc entra a indentar de nuevo, no se modifica el invariante con respecto a el, 
---ya que solo se amplían los saltos de línea, el texto y el d no se modifican en esa instancia.
-
--- En el caso de que sea Línea, se mantiene el invariante de que i>=0, ya que solo se suma un
--- i positivo al número de línea que por invariante de entrada debe ser positivo.
+--Para Linea i d, se va a mantener el invariante de que i>= 0 porque solo se suma un i positivo al número de línea 
+--que por invariante de entrada debe ser positivo.
 
 indentar :: Int -> Doc -> Doc
 indentar i = foldDoc Vacio Texto (\i' d -> Linea (i+i') d)
