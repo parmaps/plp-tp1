@@ -2,10 +2,6 @@ module PPON where
 
 import Documento
 
--- recr :: b -> (a -> [a] -> b -> b) -> [a] -> b
--- recr z _ [] = z
--- recr z f (x:xs) = f x xs (recr z f xs)
-
 data PPON
   = TextoPP String
   | IntPP Int
@@ -27,7 +23,7 @@ pponObjetoSimple pepon = case pepon of
 intercalar :: Doc -> [Doc] -> Doc
 intercalar _ [] = vacio
 intercalar sep docs = foldr1 (\doc resto -> doc <+> sep <+> resto) docs
-  
+
 
 entreLlaves :: [Doc] -> Doc
 entreLlaves [] = texto "{ }"
@@ -44,16 +40,12 @@ entreLlaves ds =
 aplanar :: Doc -> Doc
 aplanar = foldDoc vacio (\s d -> texto s <+> d) (\_ d -> texto " " <+> d)
 
--- Justificacion de Recursion
--- Asumiendo que las funciones (aplanar, entreLlaves) utilizadas en la función pponADoc no modifican el tipo de recursión,
--- podemos decir que la función pponADoc utiliza recursión primitiva.
--- Cumple con tener una definición para cada constructor del tipo PPON, 
--- los casos base tienen un valor fijo que no depende de llamadas recursivas
--- y en el caso del constructor ObjetoPP xs, 
--- la funcion accede a la subestructura xs (una lista de pares (s,p)) para mapear su contenido
--- y procesar explicítamente la clave 's' antes de aplicar la recursion sobre el valor 'p'.
-
-
+--* Justificacion de Recursion
+-- La recursion que utiliza es primitiva y NO estructural ya que
+-- se le pasa pepon (la subestructura) a pponObjetoSimple, 
+-- lo cual hace que acceda a la subestructura sin modificar,
+-- y este comportamiento no es valido en la recursion estructural 
+-- Por otro lado, tambien cumple con que se accede a la subestructura en el llamado recursivo
 pponADoc :: PPON -> Doc
 pponADoc pepon = case pepon of 
                     ObjetoPP xs -> if pponObjetoSimple pepon

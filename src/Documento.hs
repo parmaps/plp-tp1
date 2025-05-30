@@ -28,7 +28,7 @@ texto t | '\n' `elem` t = error "El texto no debe contener saltos de línea"
 texto [] = Vacio
 texto t = Texto t Vacio
 
--- Ejercicio 1 
+--* Ejercicio 1 
 foldDoc :: b -> (String -> b -> b) -> (Int -> b -> b) -> Doc -> b
 foldDoc fVacio fTexto fLinea documento = case documento of
                                               Vacio -> fVacio
@@ -40,7 +40,7 @@ foldDoc fVacio fTexto fLinea documento = case documento of
 -- También permite que expresiones como `texto "a" <+> linea <+> texto "c"` sean válidas sin la necesidad de usar paréntesis.
 infixr 6 <+>
 
--- Ejercicio 2
+--* Ejercicio 2
 
 -- Justificacion Invariante
 --Se satisface el Invariante de Doc:
@@ -52,6 +52,7 @@ infixr 6 <+>
 --si el segundo argumento (d2) es tambien Texto s' doc, entonces contruye uno nuevo concatenando el s de un documento d1 
 --y el s' d2 (y sabemos que s, s' y doc ya cumplen el invariante)
 --sino, se contruye un nuevo Texto con s y un doc que puede ser Vacio o Linea i d y también siguen cumpliendo con el invariante.
+--Ademas tampoco hay dos Texto seguidos.
 
 --Linea s d: en este caso, trabaja directamente con el contructor Linea y sin modificar del valor de i por lo que podemos 
 --asegurar que i sigue cumpliendo la condición de i >= 0.
@@ -61,14 +62,12 @@ infixr 6 <+>
 
 (<+>) :: Doc -> Doc -> Doc
 d1 <+> d2 = foldDoc d2 concatText Linea d1 
+  where concatText s d = case d of                   
+                    Texto s' doc -> Texto (s ++ s') doc
+                    x -> Texto s x 
 
 
-concatText :: String -> Doc -> Doc
-concatText s d = case d of                   
-                  Texto s' doc -> Texto (s ++ s') doc
-                  x -> Texto s x --
-                
--- Ejercicio 3
+--* Ejercicio 3
 -- Justificacion Invariante
 -- Se mantiene el Invariante de Doc porque:
 --En este ejercicio también trabajamos con foldDoc para recorrer el documento y cumple con el invariante porque 
@@ -83,7 +82,7 @@ concatText s d = case d of
 indentar :: Int -> Doc -> Doc
 indentar i = foldDoc Vacio Texto (\i' d -> Linea (i+i') d)
 
--- ejercicio 4
+--* Ejercicio 4
 mostrar :: Doc -> String
 mostrar = foldDoc "" (++) (\i d -> "\n" ++ replicate i ' ' ++ d)
 
