@@ -10,13 +10,23 @@ main = runTestTTAndExit allTests
 allTests :: Test
 allTests =
   test
-    [ "Ejercicio 2" ~: testsEj2,
+    [ "Ejercicio 1" ~: testsEj1,
+      "Ejercicio 2" ~: testsEj2,
       "Ejercicio 3" ~: testsEj3,
       "Ejercicio 4" ~: testsEj4,
       "Ejercicio 6" ~: testsEj6,
       "Ejercicio 7" ~: testsEj7,
       "Ejercicio 8" ~: testsEj8,
       "Ejercicio 9" ~: testsEj9
+    ]
+
+testsEj1 :: Test
+testsEj1 =
+  test
+    [ foldDoc 0 (\_ r -> r + 1) (\_ r -> r + 1) vacio ~?= 0, -- foldDoc con vacio devuelve valor base
+      foldDoc 0 (\_ r -> r + 1) (\_ r -> r + 1) (texto "boca") ~?= 1,       -- foldDoc cuenta cantidad de texto
+      foldDoc 0 (\_ r -> r + 1) (\_ r -> r + 1) linea ~?=1, -- foldDoc cuenta cantidad de linea
+      foldDoc 5 (\_ r -> r + 1) (\_ r -> r + 1) vacio ~?=5 -- foldDoc  vacio devuelve 5 
     ]
 
 testsEj2 :: Test
@@ -69,11 +79,18 @@ testsEj4 =
       mostrar (indentar 3 (linea <+> texto "a") <+> indentar 2 (linea <+> texto "b" <+> linea <+> texto "c" <+> linea)) ~?= "\n   a\n  b\n  c\n  " --mostrar multiples elementos indentados y concatenados
     ]
 
-pericles, merlina, addams, familias :: PPON
+pericles, merlina, addams, familias, tevez, palermo, riquelme, battaglia, ibarra, boca :: PPON
 pericles = ObjetoPP [("nombre", TextoPP "Pericles"), ("edad", IntPP 30)]
 merlina = ObjetoPP [("nombre", TextoPP "Merlina"), ("edad", IntPP 24)]
 addams = ObjetoPP [("0", pericles), ("1", merlina)]
 familias = ObjetoPP [("Addams", addams)]
+tevez = ObjetoPP [("nombre", TextoPP "Carlitos Tevez"), ("Copas Libertadores", IntPP 1)]
+palermo = ObjetoPP [("nombre", TextoPP "Martin Palermo"), ("Copas Libertadores", IntPP 2)]
+riquelme = ObjetoPP [("nombre", TextoPP "Juan Roman Riquelme"), ("Copas Libertadores", IntPP 3)]
+battaglia = ObjetoPP [("nombre", TextoPP "Sebastian Battaglia"), ("Copas Libertadores", IntPP 4)]
+ibarra = ObjetoPP [("nombre", TextoPP "Hugo Ibarra"), ("Copas Libertadores", IntPP 4)]
+boca = ObjetoPP [("Riquelme", riquelme), ("Tevez", tevez), ("Palermo", palermo), ("Battaglia", battaglia), ("Ibarra", ibarra)]
+
 
 testsEj6 :: Test
 testsEj6 =
@@ -123,8 +140,6 @@ testsEj9 =
     [ mostrar (pponADoc pericles) ~?= "{ \"nombre\": \"Pericles\", \"edad\": 30 }",
       mostrar (pponADoc addams) ~?= "{\n  \"0\": { \"nombre\": \"Pericles\", \"edad\": 30 },\n  \"1\": { \"nombre\": \"Merlina\", \"edad\": 24 }\n}",
       mostrar (pponADoc familias) ~?= "{\n  \"Addams\": {\n    \"0\": { \"nombre\": \"Pericles\", \"edad\": 30 },\n    \"1\": { \"nombre\": \"Merlina\", \"edad\": 24 }\n  }\n}",
-
-      -- Casos propios:
+      mostrar (pponADoc boca) ~?= "{\n  \"Riquelme\": { \"nombre\": \"Juan Roman Riquelme\", \"Copas Libertadores\": 3 },\n  \"Tevez\": { \"nombre\": \"Carlitos Tevez\", \"Copas Libertadores\": 1 },\n  \"Palermo\": { \"nombre\": \"Martin Palermo\", \"Copas Libertadores\": 2 },\n  \"Battaglia\": { \"nombre\": \"Sebastian Battaglia\", \"Copas Libertadores\": 4 },\n  \"Ibarra\": { \"nombre\": \"Hugo Ibarra\", \"Copas Libertadores\": 4 }\n}",
       mostrar (pponADoc merlina) ~?= "{ \"nombre\": \"Merlina\", \"edad\": 24 }"
-
     ]

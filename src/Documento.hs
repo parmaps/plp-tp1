@@ -28,7 +28,7 @@ texto t | '\n' `elem` t = error "El texto no debe contener saltos de línea"
 texto [] = Vacio
 texto t = Texto t Vacio
 
---* Ejercicio 1 
+-- * Ejercicio 1 
 foldDoc :: b -> (String -> b -> b) -> (Int -> b -> b) -> Doc -> b
 foldDoc fVacio fTexto fLinea documento = case documento of
                                               Vacio -> fVacio
@@ -40,7 +40,7 @@ foldDoc fVacio fTexto fLinea documento = case documento of
 -- También permite que expresiones como `texto "a" <+> linea <+> texto "c"` sean válidas sin la necesidad de usar paréntesis.
 infixr 6 <+>
 
---* Ejercicio 2
+-- * Ejercicio 2
 
 -- Justificacion Invariante
 --Se satisface el Invariante de Doc:
@@ -67,7 +67,7 @@ d1 <+> d2 = foldDoc d2 concatText Linea d1
                     x -> Texto s x 
 
 
---* Ejercicio 3
+-- * Ejercicio 3
 -- Justificacion Invariante
 -- Se mantiene el Invariante de Doc porque:
 --En este ejercicio también trabajamos con foldDoc para recorrer el documento y cumple con el invariante porque 
@@ -82,7 +82,7 @@ d1 <+> d2 = foldDoc d2 concatText Linea d1
 indentar :: Int -> Doc -> Doc
 indentar i = foldDoc Vacio Texto (\i' d -> Linea (i+i') d)
 
---* Ejercicio 4
+-- * Ejercicio 4
 mostrar :: Doc -> String
 mostrar = foldDoc "" (++) (\i d -> "\n" ++ replicate i ' ' ++ d)
 

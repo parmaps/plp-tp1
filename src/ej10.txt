@@ -3,9 +3,9 @@ P(x) :  ∀ n , m :: Int. indentar n (indentar m x) = indentar (n+m) x
 --
 
 Siendo precisos, 
-∀ n , m :: Int. x :: Doc. 
+∀ n , m :: Int. 
 n > 0 && m > 0 => indentar n (indentar m x) = indentar (n+m) x
-Por lema de generacion de bool (n > 0 && m > 0) es igual a True o False.
+Por lema de generación de bool (n > 0 && m > 0) es igual a True o False.
 
 
 Caso False:
@@ -25,7 +25,7 @@ indentar n (indentar m x) = indentar (n+m) x
 
 -- 
 
-Proponemos hacer induccion estructural en x.
+Proponemos hacer inducción estructural en x.
 
 
 CASO BASE: 
@@ -36,6 +36,8 @@ Vacío = Vacío                                                               {l
 
 
 PASO INDUCTIVO:
+
+∀ i :: Int, s :: String, d :: Doc
 
 Caso Texto:
 
@@ -65,7 +67,7 @@ indentar n (indentar m Linea i d)
 | Como queria probar
 
 
-Luego por el caso base Verdadero y el Paso Inductivo tambien Verdadero vale P(x)
+Luego por el caso base Verdadero y el Paso Inductivo también Verdadero vale P(x)
 
 Lemas y Definiciones necesarias:
 
