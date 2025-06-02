@@ -1,17 +1,27 @@
-P(x) :  ∀ n , m :: Int. x :: Doc. indentar n (indentar m x) = indentar (n+m) x
+P(x) :  ∀ n , m :: Int. indentar n (indentar m x) = indentar (n+m) x
 
 --
 
 Siendo precisos, 
 ∀ n , m :: Int. x :: Doc. 
 n > 0 && m > 0 => indentar n (indentar m x) = indentar (n+m) x
-Luego por requerimiento, n y m son efectivamente > 0. quedando
+Por lema de generacion de bool (n > 0 && m > 0) es igual a True o False.
+
+
+Caso False:
+False => indentar n (indentar m x) = indentar (n+m) x
+
+por regla del implica, esto da siempre True.
+
+Caso True:
+Por regla de Bool, al tener &&, puedo escribirlo de esta forma:
 
 True && True => indentar n (indentar m x) = indentar (n+m) x
 
-y por Bool, puedo solo probar que vale:
+y por Bool, basta probar que vale:
 
 indentar n (indentar m x) = indentar (n+m) x
+
 
 -- 
 
